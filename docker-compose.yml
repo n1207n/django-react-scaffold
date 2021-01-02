@@ -1,0 +1,63 @@
+version: "3.7"
+
+volumes:
+  runtime-volume:
+
+services:
+  app_backend:
+    build: app_backend
+    container_name: app_backend
+    restart: always
+    env_file:
+      - envs/app_backend.env
+    command:
+      bash -c "waitforit -host=app_backend_db -port=5432 --timeout 30 &&
+      python /code/manage.py collectstatic --noinput &&
+      python /code/manage.py migrate &&
+      gunicorn --workers=2 --bind=0.0.0.0:8000 myapp.wsgi:application --reload"
+    depends_on:
+      - app_backend_db
+      - redis
+    volumes:
+      - runtime-volume:/data
+      - ./app_backend/:/code
+      - ./app_backend/myapp/static:/data/static
+
+  app_frontend:
+    build: app_frontend
+    container_name: app_frontend
+    restart: always
+    env_file:
+      - envs/app_frontend.env
+    ports:
+      - "3000:3000"
+    command:
+        bash -c "npm start"
+    depends_on:
+      - app_backend
+    volumes:
+      - ./app_frontend/:/code
+      - /code/node_modules
+
+  nginx_proxy:
+    image: nginx:1.17-alpine
+    container_name: nginx_proxy
+    ports:
+      - "9000:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - app_backend
+      - app_frontend
+
+  app_backend_db:
+    image: postgres:13.1-alpine
+    container_name: app_backend_db
+    restart: always
+    env_file:
+      - envs/app_backend.env
+
+  redis:
+    container_name: redis
+    restart: unless-stopped
+    image: redis:6.0.9-alpine

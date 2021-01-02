@@ -1,0 +1,3 @@
+[flake8]
+max-line-length = 150
+exclude = *migrations/*,__init__.py,settings,manage.py,*/urls.py,*/apps.py,wsgi.py

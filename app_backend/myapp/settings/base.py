@@ -4,6 +4,8 @@ from datetime import timedelta
 from pathlib import Path
 
 # Load env variables to start
+from django.utils.translation import gettext_lazy as _
+
 ENV = os.getenv('ENV')
 if not ENV:
     raise Exception('Environment variable ENV is required!')
@@ -103,6 +105,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ] + ENV_MIDDLEWARE
@@ -153,6 +156,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = [
+    ('en', _('English')),
+]
+
+LOCALE_PATHS = (
+    os.path.join(PROJECT_DIR, 'locale'),
+)
 
 TIME_ZONE = 'UTC'
 

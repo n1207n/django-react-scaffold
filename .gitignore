@@ -148,3 +148,5 @@ htmlcov
 
 # Javascript
 node_modules/
+
+.eslintcache

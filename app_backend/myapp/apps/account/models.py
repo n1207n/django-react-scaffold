@@ -4,8 +4,9 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
 from django.core.mail import send_mail
+from django.utils.translation import gettext_lazy as _
 from django.db import models
-from model_utils.models import SoftDeletableModel
+from model_utils.models import SoftDeletableModel, TimeStampedModel
 
 
 class UserManager(BaseUserManager):
@@ -19,7 +20,7 @@ class UserManager(BaseUserManager):
         Creates and saves a User with the given email and password.
         """
         if not email:
-            raise ValueError('The given email must be set')
+            raise ValueError(_('The given email must be set'))
 
         email = self.normalize_email(email)
         user = self.model(email=email, is_staff=is_staff, is_active=True,
@@ -38,28 +39,26 @@ class UserManager(BaseUserManager):
                                  **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin, SoftDeletableModel):
+class User(AbstractBaseUser, PermissionsMixin, SoftDeletableModel, TimeStampedModel):
     """
     Customized User model based on Django's original User.
     """
 
-    username = models.CharField('username', max_length=30,
-                                help_text='30 characters or fewer. Letters, numbers and '
-                                '@/./+/-/_ characters',
+    username = models.CharField(_('username'), max_length=30,
+                                help_text=_('30 characters or fewer. Letters, numbers and '
+                                '@/./+/-/_ characters'),
                                 validators=[
                                     validators.RegexValidator(
-                                        re.compile(r'^[\w.@+-]+$'), 'Enter a valid username.', 'invalid')
+                                        re.compile(r'^[\w.@+-]+$'), _('Enter a valid username.'), 'invalid')
                                 ], blank=True, default='')
-    email = models.EmailField('email', max_length=254, unique=True)
-    first_name = models.CharField('first name', max_length=50)
-    last_name = models.CharField('last name', max_length=50)
-    is_staff = models.BooleanField('staff status', default=False,
-                                   help_text='Designates whether the user can log into this admin site.')
-    is_active = models.BooleanField('active', default=False,
-                                    help_text='Designates whether this user should be treated as '
-                                    'active. Unselect this instead of deleting accounts.')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    email = models.EmailField(_('email'), max_length=254, unique=True)
+    first_name = models.CharField(_('first name'), max_length=50)
+    last_name = models.CharField(_('last name'), max_length=50)
+    is_staff = models.BooleanField(_('staff status'), default=False,
+                                   help_text=_('Designates whether the user can log into this admin site.'))
+    is_active = models.BooleanField(_('active'), default=False,
+                                    help_text=_('Designates whether this user should be treated as '
+                                    'active. Unselect this instead of deleting user.'))
 
     objects = UserManager()
 
@@ -67,8 +66,8 @@ class User(AbstractBaseUser, PermissionsMixin, SoftDeletableModel):
     REQUIRED_FIELDS = []
 
     class Meta:
-        verbose_name = 'user'
-        verbose_name_plural = 'users'
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
 
     def __str__(self):
         return self.get_username()
@@ -80,3 +79,27 @@ class User(AbstractBaseUser, PermissionsMixin, SoftDeletableModel):
     def email_user(self, subject, message, from_email=None, **kwargs):  # pragma: no cover
         """Sends an email to this User [upstream AbstractUser method]."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+
+class Account(TimeStampedModel, SoftDeletableModel):
+    """
+    Represent User account
+    """
+    user = models.ForeignKey(
+        'account.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='accounts',
+        verbose_name=_('account')
+    )
+    is_active = models.BooleanField(_('active'), default=False,
+                                    help_text=_('Designates whether this user should be treated as '
+                                    'active. Unselect this instead of deleting account.'))
+
+    class Meta:
+        verbose_name = _('account')
+        verbose_name_plural = _('accounts')
+
+    def __str__(self):
+        return self.get_username()

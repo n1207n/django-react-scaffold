@@ -33,7 +33,7 @@ You'll see nginx configuration file in `ENV` folder name from `nginx` folder. If
 PostgreSQL and Redis are my favorites: Super-performant and easy-to-use. Django now supports table partitioning in PostgreSQL 11+ via third-party library support. You can simulate what Instagram went through for horizontal scaling. Redis can power celery, caching, and cluster-scaling support.
 
 ### Provisioning
-I generally agree with 12-factor security. I have `envs`　folder for dotenv files and their examples.
+I generally agree with 12-factor security. I have `envs` folder for dotenv files and their examples.
 
 ### Backend Services
 
@@ -76,6 +76,11 @@ cp web_frontend.env.example web_frontend.env
 ```
 
 Examine Django settings, Graphene schema and custom User model to update to your needs.
+
+## Running the app environment
+Once docker-compose is running, access `http://app.example.com:9000` for web frontend and `http://api.example.com:9000` for web backend.
+
+Make sure to use http instead of https as the browser may perform autocomplete for you.
 
 Run docker-compose
 ```

@@ -41,7 +41,8 @@
     "prettier": "^2.1.2",
     "pretty-quick": "^3.1.0",
     "relay-compiler": "^5.0.0",
-    "env-cmd": "^10.1.0"
+    "env-cmd": "^10.1.0",
+    "chokidar": "^3.5.1"
   },
   "prettier": {
     "tabWidth": 2,

@@ -142,11 +142,10 @@ dmypy.json
 # Python compiled
 *.pyc
 *.pem
-.coverage
 htmlcov
-.pytest_cache/
 
 # Javascript
 node_modules/
 
 .eslintcache
+.idea

@@ -18,10 +18,11 @@ DATABASES = {
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
-    "https://example.com",
-    "https://app.example.com",
-    "http://localhost:8000",
-    "http://127.0.0.1:3000"
+    "https://example.com:9000",
+    "https://api.example.com:9000",
+    "https://app.example.com:9000",
+    "http://localhost::9000",
+    "http://127.0.0.1::9000"
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',

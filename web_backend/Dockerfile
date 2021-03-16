@@ -16,7 +16,9 @@ RUN apk add --upgrade --no-cache "postgresql-client" "postgresql-contrib" "postg
     linux-headers gcc make \
     libffi-dev wget jpeg-dev zlib-dev \
     graphviz graphviz-dev ttf-freefont \
-    libxml2-dev xmlsec-dev libxslt-dev
+    libxml2-dev xmlsec-dev libxslt-dev \
+    # Add Rust compiler for cryptography pypi
+    rust cargo musl-dev
 
 RUN curl -o /usr/local/bin/waitforit -sSL https://github.com/maxcnunes/waitforit/releases/download/$WAITFORIT_VERSION/waitforit-linux_amd64 && \
     chmod +x /usr/local/bin/waitforit

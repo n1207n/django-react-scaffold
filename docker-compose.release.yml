@@ -26,11 +26,11 @@ services:
       - ./web_backend/myapp/static:/data/static
 
   web-frontend-app:
-    image: myapp/myapp/web-frontend-app
+    image: myapp/myapp/web-frontend-app-bundled
     build:
       context: web_frontend
       dockerfile: Dockerfile
-      target: dev
+      target: prod
     restart: always
     env_file:
       - ./envs/web_frontend.env
@@ -74,4 +74,4 @@ services:
     restart: unless-stopped
     image: "library/redis:6.0.10-alpine3.12"
     ports:
-    - 6379:6379
+      - 6379:6379

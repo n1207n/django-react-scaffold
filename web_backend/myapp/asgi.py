@@ -12,7 +12,11 @@ import os
 from channels.routing import ProtocolTypeRouter
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myapp.settings')
+ENV = os.getenv('ENV')
+if not ENV:
+    raise Exception('Environment variable ENV is required!')
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', f'myapp.settings.{ENV}')
 
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),

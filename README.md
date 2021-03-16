@@ -35,6 +35,10 @@ PostgreSQL and Redis are my favorites: Super-performant and easy-to-use. Django 
 ### Provisioning
 I generally agree with 12-factor security. I have `envs`　folder for dotenv files and their examples.
 
+### Backend Services
+
+Django settings can enable S3 and/or Sendgrid services if configured properly via dotenv.
+
 ## Prerequisites
 - Docker & docker-compose
 

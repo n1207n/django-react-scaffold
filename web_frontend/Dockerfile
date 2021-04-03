@@ -2,9 +2,9 @@
 FROM node:14.15.1-alpine AS dev
 
 # set working directory
-WORKDIR /app
+WORKDIR /opt/project
 
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH /opt/project/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY package.json ./
@@ -24,7 +24,7 @@ RUN npm run build
 
 # production environment
 FROM nginx:stable-alpine AS prod
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /opt/project/build /usr/share/nginx/html
 
 # nginx config for react router
 COPY nginx.conf /etc/nginx/conf.d/default.conf

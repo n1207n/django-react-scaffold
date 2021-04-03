@@ -42,8 +42,8 @@ services:
       web-backend-app:
         condition: service_started
     volumes:
-      - './web_frontend:/app'
-      - '/app/node_modules'
+      - './web_frontend:/opt/project'
+      - '/opt/project/node_modules'
 
   nginx-proxy:
     image: nginx:1.17-alpine
